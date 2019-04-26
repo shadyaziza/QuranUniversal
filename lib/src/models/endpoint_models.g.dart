@@ -166,6 +166,9 @@ class _$AyahSerializer implements StructuredSerializer<Ayah> {
           specifiedType: const FullType(int)),
       'text',
       serializers.serialize(object.text, specifiedType: const FullType(String)),
+      'audio',
+      serializers.serialize(object.audio,
+          specifiedType: const FullType(String)),
       'sajda',
       serializers.serialize(object.sajda,
           specifiedType: const FullType(JsonObject)),
@@ -215,6 +218,10 @@ class _$AyahSerializer implements StructuredSerializer<Ayah> {
           break;
         case 'text':
           result.text = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'audio':
+          result.audio = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
         case 'sajda':
@@ -661,6 +668,8 @@ class _$Ayah extends Ayah {
   @override
   final String text;
   @override
+  final String audio;
+  @override
   final JsonObject sajda;
 
   factory _$Ayah([void Function(AyahBuilder) updates]) =>
@@ -675,6 +684,7 @@ class _$Ayah extends Ayah {
       this.ruku,
       this.hizbQuarter,
       this.text,
+      this.audio,
       this.sajda})
       : super._() {
     if (number == null) {
@@ -701,6 +711,9 @@ class _$Ayah extends Ayah {
     if (text == null) {
       throw new BuiltValueNullFieldError('Ayah', 'text');
     }
+    if (audio == null) {
+      throw new BuiltValueNullFieldError('Ayah', 'audio');
+    }
     if (sajda == null) {
       throw new BuiltValueNullFieldError('Ayah', 'sajda');
     }
@@ -725,6 +738,7 @@ class _$Ayah extends Ayah {
         ruku == other.ruku &&
         hizbQuarter == other.hizbQuarter &&
         text == other.text &&
+        audio == other.audio &&
         sajda == other.sajda;
   }
 
@@ -737,14 +751,16 @@ class _$Ayah extends Ayah {
                     $jc(
                         $jc(
                             $jc(
-                                $jc($jc(0, number.hashCode),
-                                    numberInSurah.hashCode),
-                                juz.hashCode),
-                            manzil.hashCode),
-                        page.hashCode),
-                    ruku.hashCode),
-                hizbQuarter.hashCode),
-            text.hashCode),
+                                $jc(
+                                    $jc($jc(0, number.hashCode),
+                                        numberInSurah.hashCode),
+                                    juz.hashCode),
+                                manzil.hashCode),
+                            page.hashCode),
+                        ruku.hashCode),
+                    hizbQuarter.hashCode),
+                text.hashCode),
+            audio.hashCode),
         sajda.hashCode));
   }
 
@@ -759,6 +775,7 @@ class _$Ayah extends Ayah {
           ..add('ruku', ruku)
           ..add('hizbQuarter', hizbQuarter)
           ..add('text', text)
+          ..add('audio', audio)
           ..add('sajda', sajda))
         .toString();
   }
@@ -799,6 +816,10 @@ class AyahBuilder implements Builder<Ayah, AyahBuilder> {
   String get text => _$this._text;
   set text(String text) => _$this._text = text;
 
+  String _audio;
+  String get audio => _$this._audio;
+  set audio(String audio) => _$this._audio = audio;
+
   JsonObject _sajda;
   JsonObject get sajda => _$this._sajda;
   set sajda(JsonObject sajda) => _$this._sajda = sajda;
@@ -815,6 +836,7 @@ class AyahBuilder implements Builder<Ayah, AyahBuilder> {
       _ruku = _$v.ruku;
       _hizbQuarter = _$v.hizbQuarter;
       _text = _$v.text;
+      _audio = _$v.audio;
       _sajda = _$v.sajda;
       _$v = null;
     }
@@ -846,6 +868,7 @@ class AyahBuilder implements Builder<Ayah, AyahBuilder> {
             ruku: ruku,
             hizbQuarter: hizbQuarter,
             text: text,
+            audio: audio,
             sajda: sajda);
     replace(_$result);
     return _$result;

@@ -41,11 +41,27 @@ abstract class Ayah implements Built<Ayah, AyahBuilder> {
   int get ruku;
   int get hizbQuarter;
   String get text;
+  String get audio;
   JsonObject get sajda;
   Ayah._();
   static Serializer<Ayah> get serializer => _$ayahSerializer;
   factory Ayah([void Function(AyahBuilder) updates]) = _$Ayah;
 }
+// abstract class AyahAudio implements Built<AyahAudio, AyahAudioBuilder> {
+//   int get number;
+//   int get numberInSurah;
+//   int get juz;
+//   int get manzil;
+//   int get page;
+//   int get ruku;
+//   int get hizbQuarter;
+//   String get text;
+//   String get audio;
+//   JsonObject get sajda;
+//   AyahAudio._();
+//   static Serializer<AyahAudio> get serializer => _$ayahAudioSerializer;
+//   factory AyahAudio([void Function(AyahAudioBuilder) updates]) = _$AyahAudio;
+// }
 
 ///For Surah End Point
 abstract class SurahEndPoint
