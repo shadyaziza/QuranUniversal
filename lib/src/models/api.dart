@@ -32,9 +32,9 @@ Future<List<SurahMeta>> getSurahsMeta() async {
 Future<Surah> getSingleSurah(int number) async {
   final response =
       await http.get((Uri.parse('http://api.alquran.cloud/v1/surah/$number')));
-  print(response.body);
+  // print(response.body);
   SingleSurahData surahData = serializers.deserializeWith(
       SingleSurahData.serializer, json.decode(response.body));
-  print(surahData.data);
+  // print(surahData.data);
   return surahData.data;
 }

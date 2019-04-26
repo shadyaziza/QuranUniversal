@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/single_surah/bloc.dart';
+import 'package:flutter/gestures.dart';
 
 class SurahScreen extends StatefulWidget {
   final int number;
@@ -14,11 +15,12 @@ class SurahScreen extends StatefulWidget {
 
 class _SurahScreenState extends State<SurahScreen> {
   SingleSurahBloc _singleSurahBloc = SingleSurahBloc();
-
+  LongPressGestureRecognizer _longPressGestureRecognizer;
   @override
   void initState() {
     _singleSurahBloc.dispatch(Fetch(number: widget.number));
-
+    _longPressGestureRecognizer = LongPressGestureRecognizer()
+      ..onLongPress = _handleLongPress;
     super.initState();
   }
 
@@ -26,6 +28,10 @@ class _SurahScreenState extends State<SurahScreen> {
   void dispose() {
     _singleSurahBloc.dispose();
     super.dispose();
+  }
+
+  void _handleLongPress() {
+    print('pressed');
   }
 
   @override
@@ -78,12 +84,17 @@ class _SurahScreenState extends State<SurahScreen> {
                       padding: const EdgeInsets.all(20.0),
                       child: Text.rich(
                         TextSpan(
+                          recognizer: _longPressGestureRecognizer,
                           text:
-                              '${state.surah.ayahs[0].text} ${state.surah.ayahs[0].numberInSurah} ',
+                              '${state.surah.ayahs[0].text} ${state.surah.ayahs[0].numberInSurah} '
+                                  .replaceFirst(
+                                      'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+                                      ''),
                           children: List.generate(
                             state.surah.ayahs.length - 1,
                             (int index) {
                               return TextSpan(
+                                  recognizer: _longPressGestureRecognizer,
                                   text: '${state.surah.ayahs[index + 1].text}',
                                   children: [
                                     TextSpan(
