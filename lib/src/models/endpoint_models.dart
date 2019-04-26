@@ -1,5 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:built_value/json_object.dart';
 import 'package:built_value/serializer.dart';
 
 part 'endpoint_models.g.dart';
@@ -40,7 +41,7 @@ abstract class Ayah implements Built<Ayah, AyahBuilder> {
   int get ruku;
   int get hizbQuarter;
   String get text;
-  Object get sajda;
+  JsonObject get sajda;
   Ayah._();
   static Serializer<Ayah> get serializer => _$ayahSerializer;
   factory Ayah([void Function(AyahBuilder) updates]) = _$Ayah;

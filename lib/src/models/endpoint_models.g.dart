@@ -168,7 +168,7 @@ class _$AyahSerializer implements StructuredSerializer<Ayah> {
       serializers.serialize(object.text, specifiedType: const FullType(String)),
       'sajda',
       serializers.serialize(object.sajda,
-          specifiedType: const FullType(Object)),
+          specifiedType: const FullType(JsonObject)),
     ];
 
     return result;
@@ -219,7 +219,7 @@ class _$AyahSerializer implements StructuredSerializer<Ayah> {
           break;
         case 'sajda':
           result.sajda = serializers.deserialize(value,
-              specifiedType: const FullType(Object));
+              specifiedType: const FullType(JsonObject)) as JsonObject;
           break;
       }
     }
@@ -661,7 +661,7 @@ class _$Ayah extends Ayah {
   @override
   final String text;
   @override
-  final Object sajda;
+  final JsonObject sajda;
 
   factory _$Ayah([void Function(AyahBuilder) updates]) =>
       (new AyahBuilder()..update(updates)).build();
@@ -799,9 +799,9 @@ class AyahBuilder implements Builder<Ayah, AyahBuilder> {
   String get text => _$this._text;
   set text(String text) => _$this._text = text;
 
-  Object _sajda;
-  Object get sajda => _$this._sajda;
-  set sajda(Object sajda) => _$this._sajda = sajda;
+  JsonObject _sajda;
+  JsonObject get sajda => _$this._sajda;
+  set sajda(JsonObject sajda) => _$this._sajda = sajda;
 
   AyahBuilder();
 
