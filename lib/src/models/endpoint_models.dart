@@ -40,7 +40,7 @@ abstract class Ayah implements Built<Ayah, AyahBuilder> {
   int get ruku;
   int get hizbQuarter;
   String get text;
-  bool get sajda;
+  Object get sajda;
   Ayah._();
   static Serializer<Ayah> get serializer => _$ayahSerializer;
   factory Ayah([void Function(AyahBuilder) updates]) = _$Ayah;
