@@ -1,14 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'quran_universal.dart';
+part of 'endpoint_models.dart';
 
 // **************************************************************************
 // BuiltValueGenerator
 // **************************************************************************
 
-Serializer<QuranUniversal> _$quranUniversalSerializer =
-    new _$QuranUniversalSerializer();
-Serializer<Data> _$dataSerializer = new _$DataSerializer();
+Serializer<SingleSurahData> _$singleSurahDataSerializer =
+    new _$SingleSurahDataSerializer();
 Serializer<Surah> _$surahSerializer = new _$SurahSerializer();
 Serializer<Ayah> _$ayahSerializer = new _$AyahSerializer();
 Serializer<SurahEndPoint> _$surahEndPointSerializer =
@@ -16,28 +15,28 @@ Serializer<SurahEndPoint> _$surahEndPointSerializer =
 Serializer<Surahs> _$surahsSerializer = new _$SurahsSerializer();
 Serializer<SurahMeta> _$surahMetaSerializer = new _$SurahMetaSerializer();
 
-class _$QuranUniversalSerializer
-    implements StructuredSerializer<QuranUniversal> {
+class _$SingleSurahDataSerializer
+    implements StructuredSerializer<SingleSurahData> {
   @override
-  final Iterable<Type> types = const [QuranUniversal, _$QuranUniversal];
+  final Iterable<Type> types = const [SingleSurahData, _$SingleSurahData];
   @override
-  final String wireName = 'QuranUniversal';
+  final String wireName = 'SingleSurahData';
 
   @override
-  Iterable serialize(Serializers serializers, QuranUniversal object,
+  Iterable serialize(Serializers serializers, SingleSurahData object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
       'data',
-      serializers.serialize(object.data, specifiedType: const FullType(Data)),
+      serializers.serialize(object.data, specifiedType: const FullType(Surah)),
     ];
 
     return result;
   }
 
   @override
-  QuranUniversal deserialize(Serializers serializers, Iterable serialized,
+  SingleSurahData deserialize(Serializers serializers, Iterable serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new QuranUniversalBuilder();
+    final result = new SingleSurahDataBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -47,50 +46,7 @@ class _$QuranUniversalSerializer
       switch (key) {
         case 'data':
           result.data.replace(serializers.deserialize(value,
-              specifiedType: const FullType(Data)) as Data);
-          break;
-      }
-    }
-
-    return result.build();
-  }
-}
-
-class _$DataSerializer implements StructuredSerializer<Data> {
-  @override
-  final Iterable<Type> types = const [Data, _$Data];
-  @override
-  final String wireName = 'Data';
-
-  @override
-  Iterable serialize(Serializers serializers, Data object,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'surahs',
-      serializers.serialize(object.surahs,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(Surah)])),
-    ];
-
-    return result;
-  }
-
-  @override
-  Data deserialize(Serializers serializers, Iterable serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    final result = new DataBuilder();
-
-    final iterator = serialized.iterator;
-    while (iterator.moveNext()) {
-      final key = iterator.current as String;
-      iterator.moveNext();
-      final dynamic value = iterator.current;
-      switch (key) {
-        case 'surahs':
-          result.surahs.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(Surah)]))
-              as BuiltList);
+              specifiedType: const FullType(Surah)) as Surah);
           break;
       }
     }
@@ -109,10 +65,8 @@ class _$SurahSerializer implements StructuredSerializer<Surah> {
   Iterable serialize(Serializers serializers, Surah object,
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object>[
-      'ayahs',
-      serializers.serialize(object.ayahs,
-          specifiedType:
-              const FullType(BuiltList, const [const FullType(Ayah)])),
+      'number',
+      serializers.serialize(object.number, specifiedType: const FullType(int)),
       'name',
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'englishName',
@@ -124,6 +78,13 @@ class _$SurahSerializer implements StructuredSerializer<Surah> {
       'revelationType',
       serializers.serialize(object.revelationType,
           specifiedType: const FullType(String)),
+      'numberOfAyahs',
+      serializers.serialize(object.numberOfAyahs,
+          specifiedType: const FullType(int)),
+      'ayahs',
+      serializers.serialize(object.ayahs,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(Ayah)])),
     ];
 
     return result;
@@ -140,11 +101,9 @@ class _$SurahSerializer implements StructuredSerializer<Surah> {
       iterator.moveNext();
       final dynamic value = iterator.current;
       switch (key) {
-        case 'ayahs':
-          result.ayahs.replace(serializers.deserialize(value,
-                  specifiedType:
-                      const FullType(BuiltList, const [const FullType(Ayah)]))
-              as BuiltList);
+        case 'number':
+          result.number = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
@@ -161,6 +120,16 @@ class _$SurahSerializer implements StructuredSerializer<Surah> {
         case 'revelationType':
           result.revelationType = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'numberOfAyahs':
+          result.numberOfAyahs = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
+        case 'ayahs':
+          result.ayahs.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(Ayah)]))
+              as BuiltList);
           break;
       }
     }
@@ -197,6 +166,8 @@ class _$AyahSerializer implements StructuredSerializer<Ayah> {
           specifiedType: const FullType(int)),
       'text',
       serializers.serialize(object.text, specifiedType: const FullType(String)),
+      'sajda',
+      serializers.serialize(object.sajda, specifiedType: const FullType(bool)),
     ];
 
     return result;
@@ -244,6 +215,10 @@ class _$AyahSerializer implements StructuredSerializer<Ayah> {
         case 'text':
           result.text = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
+          break;
+        case 'sajda':
+          result.sajda = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
           break;
       }
     }
@@ -386,31 +361,31 @@ class _$SurahMetaSerializer implements StructuredSerializer<SurahMeta> {
   }
 }
 
-class _$QuranUniversal extends QuranUniversal {
+class _$SingleSurahData extends SingleSurahData {
   @override
-  final Data data;
+  final Surah data;
 
-  factory _$QuranUniversal([void Function(QuranUniversalBuilder) updates]) =>
-      (new QuranUniversalBuilder()..update(updates)).build();
+  factory _$SingleSurahData([void Function(SingleSurahDataBuilder) updates]) =>
+      (new SingleSurahDataBuilder()..update(updates)).build();
 
-  _$QuranUniversal._({this.data}) : super._() {
+  _$SingleSurahData._({this.data}) : super._() {
     if (data == null) {
-      throw new BuiltValueNullFieldError('QuranUniversal', 'data');
+      throw new BuiltValueNullFieldError('SingleSurahData', 'data');
     }
   }
 
   @override
-  QuranUniversal rebuild(void Function(QuranUniversalBuilder) updates) =>
+  SingleSurahData rebuild(void Function(SingleSurahDataBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  QuranUniversalBuilder toBuilder() =>
-      new QuranUniversalBuilder()..replace(this);
+  SingleSurahDataBuilder toBuilder() =>
+      new SingleSurahDataBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is QuranUniversal && data == other.data;
+    return other is SingleSurahData && data == other.data;
   }
 
   @override
@@ -420,22 +395,22 @@ class _$QuranUniversal extends QuranUniversal {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('QuranUniversal')..add('data', data))
+    return (newBuiltValueToStringHelper('SingleSurahData')..add('data', data))
         .toString();
   }
 }
 
-class QuranUniversalBuilder
-    implements Builder<QuranUniversal, QuranUniversalBuilder> {
-  _$QuranUniversal _$v;
+class SingleSurahDataBuilder
+    implements Builder<SingleSurahData, SingleSurahDataBuilder> {
+  _$SingleSurahData _$v;
 
-  DataBuilder _data;
-  DataBuilder get data => _$this._data ??= new DataBuilder();
-  set data(DataBuilder data) => _$this._data = data;
+  SurahBuilder _data;
+  SurahBuilder get data => _$this._data ??= new SurahBuilder();
+  set data(SurahBuilder data) => _$this._data = data;
 
-  QuranUniversalBuilder();
+  SingleSurahDataBuilder();
 
-  QuranUniversalBuilder get _$this {
+  SingleSurahDataBuilder get _$this {
     if (_$v != null) {
       _data = _$v.data?.toBuilder();
       _$v = null;
@@ -444,23 +419,23 @@ class QuranUniversalBuilder
   }
 
   @override
-  void replace(QuranUniversal other) {
+  void replace(SingleSurahData other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$QuranUniversal;
+    _$v = other as _$SingleSurahData;
   }
 
   @override
-  void update(void Function(QuranUniversalBuilder) updates) {
+  void update(void Function(SingleSurahDataBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$QuranUniversal build() {
-    _$QuranUniversal _$result;
+  _$SingleSurahData build() {
+    _$SingleSurahData _$result;
     try {
-      _$result = _$v ?? new _$QuranUniversal._(data: data.build());
+      _$result = _$v ?? new _$SingleSurahData._(data: data.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -468,96 +443,7 @@ class QuranUniversalBuilder
         data.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'QuranUniversal', _$failedField, e.toString());
-      }
-      rethrow;
-    }
-    replace(_$result);
-    return _$result;
-  }
-}
-
-class _$Data extends Data {
-  @override
-  final BuiltList<Surah> surahs;
-
-  factory _$Data([void Function(DataBuilder) updates]) =>
-      (new DataBuilder()..update(updates)).build();
-
-  _$Data._({this.surahs}) : super._() {
-    if (surahs == null) {
-      throw new BuiltValueNullFieldError('Data', 'surahs');
-    }
-  }
-
-  @override
-  Data rebuild(void Function(DataBuilder) updates) =>
-      (toBuilder()..update(updates)).build();
-
-  @override
-  DataBuilder toBuilder() => new DataBuilder()..replace(this);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(other, this)) return true;
-    return other is Data && surahs == other.surahs;
-  }
-
-  @override
-  int get hashCode {
-    return $jf($jc(0, surahs.hashCode));
-  }
-
-  @override
-  String toString() {
-    return (newBuiltValueToStringHelper('Data')..add('surahs', surahs))
-        .toString();
-  }
-}
-
-class DataBuilder implements Builder<Data, DataBuilder> {
-  _$Data _$v;
-
-  ListBuilder<Surah> _surahs;
-  ListBuilder<Surah> get surahs => _$this._surahs ??= new ListBuilder<Surah>();
-  set surahs(ListBuilder<Surah> surahs) => _$this._surahs = surahs;
-
-  DataBuilder();
-
-  DataBuilder get _$this {
-    if (_$v != null) {
-      _surahs = _$v.surahs?.toBuilder();
-      _$v = null;
-    }
-    return this;
-  }
-
-  @override
-  void replace(Data other) {
-    if (other == null) {
-      throw new ArgumentError.notNull('other');
-    }
-    _$v = other as _$Data;
-  }
-
-  @override
-  void update(void Function(DataBuilder) updates) {
-    if (updates != null) updates(this);
-  }
-
-  @override
-  _$Data build() {
-    _$Data _$result;
-    try {
-      _$result = _$v ?? new _$Data._(surahs: surahs.build());
-    } catch (_) {
-      String _$failedField;
-      try {
-        _$failedField = 'surahs';
-        surahs.build();
-      } catch (e) {
-        throw new BuiltValueNestedFieldError(
-            'Data', _$failedField, e.toString());
+            'SingleSurahData', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -568,7 +454,7 @@ class DataBuilder implements Builder<Data, DataBuilder> {
 
 class _$Surah extends Surah {
   @override
-  final BuiltList<Ayah> ayahs;
+  final int number;
   @override
   final String name;
   @override
@@ -577,19 +463,25 @@ class _$Surah extends Surah {
   final String englishNameTranslation;
   @override
   final String revelationType;
+  @override
+  final int numberOfAyahs;
+  @override
+  final BuiltList<Ayah> ayahs;
 
   factory _$Surah([void Function(SurahBuilder) updates]) =>
       (new SurahBuilder()..update(updates)).build();
 
   _$Surah._(
-      {this.ayahs,
+      {this.number,
       this.name,
       this.englishName,
       this.englishNameTranslation,
-      this.revelationType})
+      this.revelationType,
+      this.numberOfAyahs,
+      this.ayahs})
       : super._() {
-    if (ayahs == null) {
-      throw new BuiltValueNullFieldError('Surah', 'ayahs');
+    if (number == null) {
+      throw new BuiltValueNullFieldError('Surah', 'number');
     }
     if (name == null) {
       throw new BuiltValueNullFieldError('Surah', 'name');
@@ -602,6 +494,12 @@ class _$Surah extends Surah {
     }
     if (revelationType == null) {
       throw new BuiltValueNullFieldError('Surah', 'revelationType');
+    }
+    if (numberOfAyahs == null) {
+      throw new BuiltValueNullFieldError('Surah', 'numberOfAyahs');
+    }
+    if (ayahs == null) {
+      throw new BuiltValueNullFieldError('Surah', 'ayahs');
     }
   }
 
@@ -616,31 +514,39 @@ class _$Surah extends Surah {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is Surah &&
-        ayahs == other.ayahs &&
+        number == other.number &&
         name == other.name &&
         englishName == other.englishName &&
         englishNameTranslation == other.englishNameTranslation &&
-        revelationType == other.revelationType;
+        revelationType == other.revelationType &&
+        numberOfAyahs == other.numberOfAyahs &&
+        ayahs == other.ayahs;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, ayahs.hashCode), name.hashCode),
-                englishName.hashCode),
-            englishNameTranslation.hashCode),
-        revelationType.hashCode));
+            $jc(
+                $jc(
+                    $jc($jc($jc(0, number.hashCode), name.hashCode),
+                        englishName.hashCode),
+                    englishNameTranslation.hashCode),
+                revelationType.hashCode),
+            numberOfAyahs.hashCode),
+        ayahs.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('Surah')
-          ..add('ayahs', ayahs)
+          ..add('number', number)
           ..add('name', name)
           ..add('englishName', englishName)
           ..add('englishNameTranslation', englishNameTranslation)
-          ..add('revelationType', revelationType))
+          ..add('revelationType', revelationType)
+          ..add('numberOfAyahs', numberOfAyahs)
+          ..add('ayahs', ayahs))
         .toString();
   }
 }
@@ -648,9 +554,9 @@ class _$Surah extends Surah {
 class SurahBuilder implements Builder<Surah, SurahBuilder> {
   _$Surah _$v;
 
-  ListBuilder<Ayah> _ayahs;
-  ListBuilder<Ayah> get ayahs => _$this._ayahs ??= new ListBuilder<Ayah>();
-  set ayahs(ListBuilder<Ayah> ayahs) => _$this._ayahs = ayahs;
+  int _number;
+  int get number => _$this._number;
+  set number(int number) => _$this._number = number;
 
   String _name;
   String get name => _$this._name;
@@ -670,15 +576,25 @@ class SurahBuilder implements Builder<Surah, SurahBuilder> {
   set revelationType(String revelationType) =>
       _$this._revelationType = revelationType;
 
+  int _numberOfAyahs;
+  int get numberOfAyahs => _$this._numberOfAyahs;
+  set numberOfAyahs(int numberOfAyahs) => _$this._numberOfAyahs = numberOfAyahs;
+
+  ListBuilder<Ayah> _ayahs;
+  ListBuilder<Ayah> get ayahs => _$this._ayahs ??= new ListBuilder<Ayah>();
+  set ayahs(ListBuilder<Ayah> ayahs) => _$this._ayahs = ayahs;
+
   SurahBuilder();
 
   SurahBuilder get _$this {
     if (_$v != null) {
-      _ayahs = _$v.ayahs?.toBuilder();
+      _number = _$v.number;
       _name = _$v.name;
       _englishName = _$v.englishName;
       _englishNameTranslation = _$v.englishNameTranslation;
       _revelationType = _$v.revelationType;
+      _numberOfAyahs = _$v.numberOfAyahs;
+      _ayahs = _$v.ayahs?.toBuilder();
       _$v = null;
     }
     return this;
@@ -703,11 +619,13 @@ class SurahBuilder implements Builder<Surah, SurahBuilder> {
     try {
       _$result = _$v ??
           new _$Surah._(
-              ayahs: ayahs.build(),
+              number: number,
               name: name,
               englishName: englishName,
               englishNameTranslation: englishNameTranslation,
-              revelationType: revelationType);
+              revelationType: revelationType,
+              numberOfAyahs: numberOfAyahs,
+              ayahs: ayahs.build());
     } catch (_) {
       String _$failedField;
       try {
@@ -741,6 +659,8 @@ class _$Ayah extends Ayah {
   final int hizbQuarter;
   @override
   final String text;
+  @override
+  final bool sajda;
 
   factory _$Ayah([void Function(AyahBuilder) updates]) =>
       (new AyahBuilder()..update(updates)).build();
@@ -753,7 +673,8 @@ class _$Ayah extends Ayah {
       this.page,
       this.ruku,
       this.hizbQuarter,
-      this.text})
+      this.text,
+      this.sajda})
       : super._() {
     if (number == null) {
       throw new BuiltValueNullFieldError('Ayah', 'number');
@@ -779,6 +700,9 @@ class _$Ayah extends Ayah {
     if (text == null) {
       throw new BuiltValueNullFieldError('Ayah', 'text');
     }
+    if (sajda == null) {
+      throw new BuiltValueNullFieldError('Ayah', 'sajda');
+    }
   }
 
   @override
@@ -799,7 +723,8 @@ class _$Ayah extends Ayah {
         page == other.page &&
         ruku == other.ruku &&
         hizbQuarter == other.hizbQuarter &&
-        text == other.text;
+        text == other.text &&
+        sajda == other.sajda;
   }
 
   @override
@@ -810,14 +735,16 @@ class _$Ayah extends Ayah {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc(0, number.hashCode),
-                                numberInSurah.hashCode),
-                            juz.hashCode),
-                        manzil.hashCode),
-                    page.hashCode),
-                ruku.hashCode),
-            hizbQuarter.hashCode),
-        text.hashCode));
+                            $jc(
+                                $jc($jc(0, number.hashCode),
+                                    numberInSurah.hashCode),
+                                juz.hashCode),
+                            manzil.hashCode),
+                        page.hashCode),
+                    ruku.hashCode),
+                hizbQuarter.hashCode),
+            text.hashCode),
+        sajda.hashCode));
   }
 
   @override
@@ -830,7 +757,8 @@ class _$Ayah extends Ayah {
           ..add('page', page)
           ..add('ruku', ruku)
           ..add('hizbQuarter', hizbQuarter)
-          ..add('text', text))
+          ..add('text', text)
+          ..add('sajda', sajda))
         .toString();
   }
 }
@@ -870,6 +798,10 @@ class AyahBuilder implements Builder<Ayah, AyahBuilder> {
   String get text => _$this._text;
   set text(String text) => _$this._text = text;
 
+  bool _sajda;
+  bool get sajda => _$this._sajda;
+  set sajda(bool sajda) => _$this._sajda = sajda;
+
   AyahBuilder();
 
   AyahBuilder get _$this {
@@ -882,6 +814,7 @@ class AyahBuilder implements Builder<Ayah, AyahBuilder> {
       _ruku = _$v.ruku;
       _hizbQuarter = _$v.hizbQuarter;
       _text = _$v.text;
+      _sajda = _$v.sajda;
       _$v = null;
     }
     return this;
@@ -911,7 +844,8 @@ class AyahBuilder implements Builder<Ayah, AyahBuilder> {
             page: page,
             ruku: ruku,
             hizbQuarter: hizbQuarter,
-            text: text);
+            text: text,
+            sajda: sajda);
     replace(_$result);
     return _$result;
   }

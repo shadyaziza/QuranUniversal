@@ -8,17 +8,13 @@ part of 'serializers.dart';
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(Ayah.serializer)
-      ..add(Data.serializer)
-      ..add(QuranUniversal.serializer)
+      ..add(SingleSurahData.serializer)
       ..add(Surah.serializer)
       ..add(SurahEndPoint.serializer)
       ..add(SurahMeta.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(Ayah)]),
           () => new ListBuilder<Ayah>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(Surah)]),
-          () => new ListBuilder<Surah>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(SurahMeta)]),
           () => new ListBuilder<SurahMeta>()))

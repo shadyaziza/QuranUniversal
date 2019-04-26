@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../../models/quran_universal.dart';
+import '../../models/endpoint_models.dart';
 
 abstract class SurahListState {
   SurahListState([List props = const []]) : super();
