@@ -5,7 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:rxdart/rxdart.dart';
 import '../../blocs/single_surah/bloc.dart';
+import '../../models/endpoint_models.dart';
+import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayer/audioplayer.dart';
 
 class SurahScreen extends StatefulWidget {
   final int number;
@@ -17,12 +21,14 @@ class SurahScreen extends StatefulWidget {
 
 class _SurahScreenState extends State<SurahScreen> {
   SingleSurahBloc _singleSurahBloc = SingleSurahBloc();
-  TapGestureRecognizer _tapGestureRecognizer;
+  // TapGestureRecognizer _tapGestureRecognizer;
   FlutterSound _sound;
+  AudioPlayer _audio;
   @override
   void initState() {
     _sound = FlutterSound();
     _singleSurahBloc.dispatch(Fetch(number: widget.number));
+    _audio = AudioPlayer();
     // _tapGestureRecognizer = TapGestureRecognizer()..onTap = _handleLongPress;
     super.initState();
   }
@@ -30,13 +36,33 @@ class _SurahScreenState extends State<SurahScreen> {
   @override
   void dispose() {
     _singleSurahBloc.dispose();
-    _sound.stopPlayer();
+    // if(_sound.)
+    // _sound?.stopPlayer();
     super.dispose();
   }
 
-  void _handleLongPress() async {
-    await _sound.startPlayer(
-        'http://cdn.alquran.cloud/media/audio/ayah/ar.abdulbasitmurattal/6231');
+  void _handleLongPress(String link) async {
+    await _audio.play(link);
+  }
+
+  Future<void> _playSurah(Surah surah) async {
+    String surahNum;
+
+    if (surah.number < 100 && surah.number >= 10) {
+      surahNum = '0' + surah.number.toString();
+    } else if (surah.number < 10) {
+      surahNum = '00' + surah.number.toString();
+    } else {
+      surahNum = surah.number.toString();
+    }
+    if (_audio.state != AudioPlayerState.PLAYING) {
+      await _audio
+          .play(
+              'https://download.quranicaudio.com/quran/abdul_basit_murattal/$surahNum.mp3')
+          .then((void _) {
+        print('Surah ${surah.englishName} is playing');
+      });
+    }
   }
 
   @override
@@ -90,7 +116,7 @@ class _SurahScreenState extends State<SurahScreen> {
                           Container(
                             child: IconButton(
                               icon: Icon(Icons.play_arrow),
-                              onPressed: () {},
+                              onPressed: () => _playSurah(state.surah),
                             ),
                             decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,
@@ -110,7 +136,8 @@ class _SurahScreenState extends State<SurahScreen> {
                           child: Text.rich(
                             TextSpan(
                               recognizer: TapGestureRecognizer()
-                                ..onTap = _handleLongPress,
+                                ..onTap = () => _handleLongPress(
+                                    state.surah.ayahs[0].audio),
                               text: '${state.surah.ayahs[0].text} ${state.surah.ayahs[0].numberInSurah} '
                                   .replaceFirst(
                                       'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
@@ -120,7 +147,8 @@ class _SurahScreenState extends State<SurahScreen> {
                                 (int index) {
                                   return TextSpan(
                                       recognizer: TapGestureRecognizer()
-                                        ..onTap = _handleLongPress,
+                                        ..onTap = () => _handleLongPress(
+                                            state.surah.ayahs[index + 1].audio),
                                       text:
                                           '${state.surah.ayahs[index + 1].text}',
                                       children: [
