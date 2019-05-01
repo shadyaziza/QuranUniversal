@@ -55,14 +55,16 @@ class _SurahScreenState extends State<SurahScreen> {
     } else {
       surahNum = surah.number.toString();
     }
-    if (_audio.state != AudioPlayerState.PLAYING) {
-      await _audio
-          .play(
-              'https://download.quranicaudio.com/quran/abdul_basit_murattal/$surahNum.mp3')
-          .then((void _) {
-        print('Surah ${surah.englishName} is playing');
-      });
+    if (_audio.state == AudioPlayerState.PLAYING) {
+      await _audio.stop();
     }
+
+    await _audio
+        .play(
+            'https://download.quranicaudio.com/quran/abdul_basit_murattal/$surahNum.mp3')
+        .then((void _) {
+      print('Surah ${surah.englishName} is playing');
+    });
   }
 
   @override
