@@ -42,6 +42,9 @@ class _SurahScreenState extends State<SurahScreen> {
   }
 
   void _handleLongPress(String link) async {
+    if (_audio.state == AudioPlayerState.PLAYING) {
+      await _audio.stop();
+    }
     await _audio.play(link);
   }
 
