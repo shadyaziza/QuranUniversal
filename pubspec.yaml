@@ -19,6 +19,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   dio: ^2.1.2
   built_value: ^6.4.0
   built_collection: ^4.2.0
@@ -38,6 +40,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: 
   built_value_generator: ^6.4.0
+  intl_translation: ^0.17.4
 
 
 
