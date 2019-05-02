@@ -66,11 +66,19 @@ flutter:
    - family: Hafs
      fonts:
       - asset: assets/UthmanicHafs.otf
-        weight: 700
    - family: Amiri
      fonts:
       - asset: assets/Amiri-Regular.ttf
-        weight: 700
+   - family: Montserrat
+     fonts:
+      - asset: assets/Montserrat-Regular.ttf
+   - family: Naskh
+     fonts:
+      - asset: assets/Naskh.ttf
+   - family: Naskh2
+     fonts:
+      - asset: assets/Naskh2.ttf
+       
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 

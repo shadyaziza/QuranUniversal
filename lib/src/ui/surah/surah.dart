@@ -17,15 +17,37 @@ class SurahScreen extends StatefulWidget {
 
 class _SurahScreenState extends State<SurahScreen> {
   SingleSurahBloc _singleSurahBloc = SingleSurahBloc();
+
   // TapGestureRecognizer _tapGestureRecognizer;
 
   AudioPlayer _audio;
+  String _url;
   @override
   void initState() {
-    _singleSurahBloc.dispatch(Fetch(number: widget.number));
+    // Locale locale = Localizations.localeOf(context);
+    // if (locale.languageCode == 'ar') {
+    //   _url =
+    //       'http://api.alquran.cloud/v1/surah/${widget.number}/ar.abdulbasitmurattal';
+    // } else {
+    //   _url = 'http://api.alquran.cloud/v1/surah/${widget.number}/en.ahmedali';
+    // }
+    // _singleSurahBloc.dispatch(Fetch(url: _url));
     _audio = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
     // _tapGestureRecognizer = TapGestureRecognizer()..onTap = _handleLongPress;
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    Locale locale = Localizations.localeOf(context);
+    if (locale.languageCode == 'ar') {
+      _url =
+          'http://api.alquran.cloud/v1/surah/${widget.number}/ar.abdulbasitmurattal';
+    } else {
+      _url = 'http://api.alquran.cloud/v1/surah/${widget.number}/en.ahmedali';
+    }
+    _singleSurahBloc.dispatch(Fetch(url: _url));
+    super.didChangeDependencies();
   }
 
   @override
@@ -37,10 +59,12 @@ class _SurahScreenState extends State<SurahScreen> {
   }
 
   void _handleLongPress(String link) async {
-    if (_audio.state == AudioPlayerState.PLAYING) {
-      await _audio.stop();
+    if (link != null) {
+      if (_audio.state == AudioPlayerState.PLAYING) {
+        await _audio.stop();
+      }
+      await _audio.play(link);
     }
-    await _audio.play(link);
   }
 
   Future<void> _playSurah(Surah surah) async {
@@ -67,7 +91,7 @@ class _SurahScreenState extends State<SurahScreen> {
 
   String replaceFarsiNumber(String input) {
     const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const farsi = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    const farsi = ['۰', '۱', '۲', '۳', '٤', '٥', '٦', '۷', '۸', '۹'];
 
     for (int i = 0; i < english.length; i++) {
       input = input.replaceAll(english[i], farsi[i]);
@@ -113,7 +137,9 @@ class _SurahScreenState extends State<SurahScreen> {
                   centerTitle: true,
                   elevation: 0.0,
                   title: Text(
-                    state.surah.name,
+                    locale.languageCode == 'ar'
+                        ? state.surah.name
+                        : state.surah.englishNameTranslation,
                     textScaleFactor: 1.5,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
@@ -190,7 +216,16 @@ class _SurahScreenState extends State<SurahScreen> {
                       },
                     ),
                     Center(
-                        child: Text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ')),
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: locale.languageCode == 'ar'
+                          ? Text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ')
+                          : Text(
+                              'In the name of Allah, most benevolent, ever-merciful.',
+                              textScaleFactor: 0.7,
+                              textAlign: TextAlign.center,
+                            ),
+                    )),
                     SingleChildScrollView(
                       child: Container(
                         margin: const EdgeInsets.all(12.0),
@@ -202,12 +237,14 @@ class _SurahScreenState extends State<SurahScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () =>
                                   _handleLongPress(state.surah.ayahs[0].audio),
-                            text:
-                                '${state.surah.ayahs[0].text} ${state.surah.ayahs[0].numberInSurah} '
-                                    .replaceFirst(
-                                        'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
-                                        '')
-                                    .replaceFirst('1', ''),
+                            text: '${state.surah.ayahs[0].text} ${state.surah.ayahs[0].numberInSurah} '
+                                .replaceFirst(
+                                    'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+                                    '')
+                                .replaceFirst('1', '')
+                                .replaceFirst(
+                                    'In the name of Allah, most benevolent, ever-merciful.',
+                                    ''),
                             children: List.generate(
                               state.surah.ayahs.length - 1,
                               (int index) {
@@ -234,7 +271,6 @@ class _SurahScreenState extends State<SurahScreen> {
                             ),
                           ),
                           textAlign: TextAlign.start,
-                          textDirection: TextDirection.rtl,
                         ),
                       ),
                     ),

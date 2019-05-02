@@ -29,9 +29,8 @@ Future<List<SurahMeta>> getSurahsMeta() async {
   return surahEnd.data.map((SurahMeta suraMeta) => suraMeta).toList();
 }
 
-Future<Surah> getSingleSurah(int number) async {
-  final response = await http.get((Uri.parse(
-      'http://api.alquran.cloud/v1/surah/$number/ar.abdulbasitmurattal')));
+Future<Surah> getSingleSurah(String url) async {
+  final response = await http.get((Uri.parse(url)));
   // print(response.body);
   SingleSurahData surahData = serializers.deserializeWith(
       SingleSurahData.serializer, json.decode(response.body));

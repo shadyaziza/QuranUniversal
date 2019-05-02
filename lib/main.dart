@@ -28,48 +28,61 @@ class _RootState extends State<Root> {
         GlobalWidgetsLocalizations.delegate
       ],
       supportedLocales: [
-        Locale('en', ''),
         Locale('ar', ''),
+        Locale('en', ''),
       ],
       locale: locale,
       onGenerateTitle: (context) => AppLocalizations.of(context).title,
       theme: ThemeData(
+          fontFamily: locale?.languageCode == 'ar' ? 'Amiri' : 'Montserrat',
           primarySwatch: Colors.cyan,
-          fontFamily: 'Hafs',
-          textTheme: TextTheme(
-              body1: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold))),
+          // fontFamily: 'Hafs',
+          textTheme: TextTheme(body1: TextStyle(fontSize: 22.0))),
       home: Builder(builder: (BuildContext context) {
         AppLocalizations locals = AppLocalizations.of(context);
-        return Scaffold(
-          drawer: Drawer(
-            child: ListView(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height / 3,
-                  color: Theme.of(context).accentColor,
-                  child: Center(child: Text(locals.title)),
-                ),
-                ListTile(
-                  title: Text('عربي'),
-                  enabled: true,
-                  onTap: () => setState(() {
-                        locale = Locale('ar', '');
-                      }),
-                ),
-                ListTile(
-                  enabled: true,
-                  title: Text('English'),
-                  onTap: () => setState(() {
-                        locale = Locale('en', '');
-                      }),
-                ),
-              ],
+        return Theme(
+          data: ThemeData(
+              primarySwatch: Colors.cyan,
+              fontFamily:
+                  locale?.languageCode == 'ar' ? 'Naskh' : 'Montserrat'),
+          child: Scaffold(
+            drawer: Drawer(
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height / 3,
+                    color: Theme.of(context).accentColor,
+                    child: Center(child: Text(locals.title)),
+                  ),
+                  Align(
+                    heightFactor: 7.5,
+                    alignment: locale?.languageCode == 'ar'
+                        ? FractionalOffset.bottomLeft
+                        : FractionalOffset.bottomRight,
+                    child: Directionality(
+                      textDirection: locale?.languageCode == 'ar'
+                          ? TextDirection.ltr
+                          : TextDirection.rtl,
+                      child: ListTile(
+                        title: Text(
+                            locale?.languageCode == 'ar' ? 'English' : 'عربي'),
+                        enabled: true,
+                        onTap: () => setState(() {
+                              locale = Locale(
+                                  locale?.languageCode == 'ar' ? 'en' : 'ar',
+                                  '');
+                            }),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
+            appBar: AppBar(
+              title: Text(locals.title),
+            ),
+            body: HomePage(),
           ),
-          appBar: AppBar(
-            title: Text(locals.title),
-          ),
-          body: HomePage(),
         );
       }),
     );

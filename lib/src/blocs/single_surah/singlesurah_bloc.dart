@@ -15,7 +15,7 @@ class SingleSurahBloc extends Bloc<SingleSurahEvent, SingleSurahState> {
     if (event is Fetch) {
       try {
         if (currentState is SingleSurahUninitialized) {
-          final singleSurah = await getSingleSurah(event.number);
+          final singleSurah = await getSingleSurah(event.url);
           yield SingleSurahLoaded(surah: singleSurah);
           return;
         }
