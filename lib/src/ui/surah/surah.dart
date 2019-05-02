@@ -115,20 +115,88 @@ class _SurahScreenState extends State<SurahScreen> {
                   textDirection: TextDirection.rtl,
                   child: ListView(
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            child: IconButton(
-                              icon: Icon(Icons.play_arrow),
-                              onPressed: () => _playSurah(state.surah),
-                            ),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(50.0)),
-                          ),
-                        ],
-                      ),
+                      Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: StreamBuilder(
+                            stream: _audio.onPlayerStateChanged,
+                            builder: (_,
+                                AsyncSnapshot<AudioPlayerState> audioState) {
+                              return StreamBuilder(
+                                stream: _audio.onDurationChanged,
+                                builder:
+                                    (_, AsyncSnapshot<Duration> totalDuration) {
+                                  return StreamBuilder(
+                                    stream: _audio.onAudioPositionChanged,
+                                    builder:
+                                        (_, AsyncSnapshot<Duration> progress) {
+                                      return Container(
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  audioState?.data !=
+                                                          AudioPlayerState
+                                                              .PLAYING
+                                                      ? IconButton(
+                                                          icon: Icon(
+                                                              Icons.play_arrow),
+                                                          onPressed: audioState
+                                                                      ?.data !=
+                                                                  AudioPlayerState
+                                                                      .PLAYING
+                                                              ? () => _playSurah(
+                                                                  state.surah)
+                                                              : null)
+                                                      : IconButton(
+                                                          icon:
+                                                              Icon(Icons.pause),
+                                                          onPressed: () async =>
+                                                              await _audio
+                                                                  .pause()),
+                                                  IconButton(
+                                                      icon: Icon(Icons.stop),
+                                                      onPressed: audioState
+                                                                  ?.data ==
+                                                              AudioPlayerState
+                                                                  .PLAYING
+                                                          ? () async =>
+                                                              await _audio
+                                                                  .stop()
+                                                          : null),
+                                                ],
+                                              ),
+                                              !progress.hasData
+                                                  ? Container()
+                                                  : Text(
+                                                      '${progress.data.inHours} : ${progress.data.inMinutes} : ${progress.data.inSeconds} / ${totalDuration.data.inHours} : ${totalDuration.data.inMinutes} : ${totalDuration.data.inSeconds}  '),
+                                              totalDuration.hasData &&
+                                                      audioState.data !=
+                                                          AudioPlayerState
+                                                              .STOPPED
+                                                  ? Flexible(
+                                                      child:
+                                                          LinearProgressIndicator(
+                                                        value: progress.data
+                                                                .inMilliseconds /
+                                                            totalDuration.data
+                                                                .inMilliseconds,
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          )),
                       Center(
                           child:
                               Text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ')),
