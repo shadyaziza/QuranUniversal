@@ -23,61 +23,64 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations locals = AppLocalizations.of(context);
+    Locale locale = Localizations.localeOf(context);
+
     return BlocBuilder(
       bloc: _surahListBloc,
       builder: (_, SurahListState state) {
         if (state is SurahListUninitialized) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(locals.title),
-            ),
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+          return Center(
+            child: CircularProgressIndicator(),
           );
         }
         if (state is SurahListError) {
-          return Scaffold(
-            body: Center(
-              child: Text(
-                  'Unable to fetch the list of surahs, please check your internet connection.'),
-            ),
+          return Center(
+            child: Text(
+                'Unable to fetch the list of surahs, please check your internet connection.'),
           );
         }
         if (state is SurahListLoaded) {
           if (state.surahsMeta.isEmpty) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(locals.title),
-              ),
-              body: Center(
-                child: Text('No Surahs'),
-              ),
+            return Center(
+              child: Text('No Surahs'),
             );
           }
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(locals.title),
-            ),
-            body: ListView.builder(
-              itemCount: state.surahsMeta.length,
-              itemBuilder: (_, int index) {
-                return ListTile(
-                  onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            fullscreenDialog: true,
-                            builder: (_) => SurahScreen(
-                                  number: state.surahsMeta[index].number,
-                                )),
-                      ),
-                  leading: Text('${state.surahsMeta[index].number}'),
-                  title: Text(state.surahsMeta[index].englishName),
-                );
-              },
-            ),
+          return ListView.builder(
+            itemCount: state.surahsMeta.length,
+            itemBuilder: (_, int index) {
+              return ListTile(
+                onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (_) => SurahScreen(
+                                number: state.surahsMeta[index].number,
+                              )),
+                    ),
+                leading: Text(
+                  locale.languageCode == 'ar'
+                      ? replaceFarsiNumber('${state.surahsMeta[index].number}')
+                      : '${state.surahsMeta[index].number}',
+                  style: TextStyle(fontFamily: 'Amiri'),
+                ),
+                title: Text(locale.languageCode == 'ar'
+                    ? state.surahsMeta[index].name
+                    : state.surahsMeta[index].englishName),
+              );
+            },
           );
         }
       },
     );
+  }
+
+  String replaceFarsiNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const farsi = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(english[i], farsi[i]);
+    }
+
+    return input;
   }
 }

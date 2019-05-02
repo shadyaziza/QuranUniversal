@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/gestures.dart';
 
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:rxdart/rxdart.dart';
 import '../../blocs/single_surah/bloc.dart';
 import '../../models/endpoint_models.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -22,13 +18,12 @@ class SurahScreen extends StatefulWidget {
 class _SurahScreenState extends State<SurahScreen> {
   SingleSurahBloc _singleSurahBloc = SingleSurahBloc();
   // TapGestureRecognizer _tapGestureRecognizer;
-  FlutterSound _sound;
+
   AudioPlayer _audio;
   @override
   void initState() {
-    _sound = FlutterSound();
     _singleSurahBloc.dispatch(Fetch(number: widget.number));
-    _audio = AudioPlayer();
+    _audio = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
     // _tapGestureRecognizer = TapGestureRecognizer()..onTap = _handleLongPress;
     super.initState();
   }
@@ -70,8 +65,20 @@ class _SurahScreenState extends State<SurahScreen> {
     });
   }
 
+  String replaceFarsiNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const farsi = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(english[i], farsi[i]);
+    }
+
+    return input;
+  }
+
   @override
   Widget build(BuildContext context) {
+    Locale locale = Localizations.localeOf(context);
     return BlocBuilder(
       bloc: _singleSurahBloc,
       builder: (_, SingleSurahState state) {
@@ -199,7 +206,8 @@ class _SurahScreenState extends State<SurahScreen> {
                                 '${state.surah.ayahs[0].text} ${state.surah.ayahs[0].numberInSurah} '
                                     .replaceFirst(
                                         'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
-                                        ''),
+                                        '')
+                                    .replaceFirst('1', ''),
                             children: List.generate(
                               state.surah.ayahs.length - 1,
                               (int index) {
@@ -208,12 +216,19 @@ class _SurahScreenState extends State<SurahScreen> {
                                       ..onTap = () => _handleLongPress(
                                           state.surah.ayahs[index + 1].audio),
                                     text:
-                                        '${state.surah.ayahs[index + 1].text}',
+                                        ' ${state.surah.ayahs[index + 1].text} ',
                                     children: [
                                       TextSpan(
-                                          text:
-                                              ' ${state.surah.ayahs[index + 1].numberInSurah} ',
-                                          style: TextStyle(color: Colors.red))
+                                          text: locale.languageCode == 'ar'
+                                              ? replaceFarsiNumber(state
+                                                  .surah
+                                                  .ayahs[index + 1]
+                                                  .numberInSurah
+                                                  .toString())
+                                              : ' ${state.surah.ayahs[index + 1].numberInSurah} ',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontFamily: 'Amiri'))
                                     ]);
                               },
                             ),

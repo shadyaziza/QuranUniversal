@@ -67,6 +67,10 @@ flutter:
      fonts:
       - asset: assets/UthmanicHafs.otf
         weight: 700
+   - family: Amiri
+     fonts:
+      - asset: assets/Amiri-Regular.ttf
+        weight: 700
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
