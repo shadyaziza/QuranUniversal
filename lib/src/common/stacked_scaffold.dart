@@ -16,7 +16,10 @@ class StackedScaffoldBody extends StatelessWidget {
       children: <Widget>[
         Container(
             height: MediaQuery.of(context).size.height / 2,
-            color: Theme.of(context).primaryColor,
+            decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+                border: Border(
+                    bottom: BorderSide(color: Colors.cyan[700], width: 12.0))),
             padding: const EdgeInsets.only(top: 12.0),
             child: AppBar(
               elevation: 0.0,
@@ -29,12 +32,11 @@ class StackedScaffoldBody extends StatelessWidget {
             // alignment: Alignment(0.5, 10.0),
             padding: const EdgeInsets.all(24.0),
             child: Card(
-              elevation: 2.0,
+              elevation: 0.2,
               child: child,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  side: BorderSide(
-                      color: Theme.of(context).primaryColor, width: 2.0)),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
             ),
           ),
         ),
