@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import '../../blocs/single_surah/bloc.dart';
 import '../../models/endpoint_models.dart';
 import 'package:audioplayers/audioplayers.dart';
+import '../../common/mushaf_loader.dart';
 // import 'package:audioplayer/audioplayer.dart';
 
 class SurahScreen extends StatefulWidget {
@@ -108,9 +109,7 @@ class _SurahScreenState extends State<SurahScreen> {
       builder: (_, SingleSurahState state) {
         if (state is SingleSurahUninitialized) {
           return Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
+            body: MushafLoader(),
           );
         }
         if (state is SingleSurahError) {

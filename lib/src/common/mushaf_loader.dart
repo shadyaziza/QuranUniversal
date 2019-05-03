@@ -7,7 +7,8 @@ class MushafLoader extends StatelessWidget {
     return Center(
       child: FlareActor(
         'assets/flares/Mushaf.flr',
-        animation: 'fade opacity',
+        fit: BoxFit.contain,
+        animation: 'Fading Mushaf',
       ),
     );
   }
