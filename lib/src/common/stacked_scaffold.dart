@@ -28,7 +28,14 @@ class StackedScaffoldBody extends StatelessWidget {
           child: Container(
             // alignment: Alignment(0.5, 10.0),
             padding: const EdgeInsets.all(24.0),
-            child: Card(child: child),
+            child: Card(
+              elevation: 2.0,
+              child: child,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  side: BorderSide(
+                      color: Theme.of(context).primaryColor, width: 2.0)),
+            ),
           ),
         ),
       ],
