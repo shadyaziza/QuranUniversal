@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
               return ListTile(
                 onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                          fullscreenDialog: true,
+                          // fullscreenDialog: true,
                           builder: (_) => SurahScreen(
                                 number: state.surahsMeta[index].number,
                               )),

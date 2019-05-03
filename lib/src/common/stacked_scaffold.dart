@@ -7,13 +7,15 @@ class StackedScaffoldBody extends StatefulWidget {
   final AppLocalizations locals;
   final VoidCallback onTap;
   final Locale locale;
+  final String appBarTitle;
 
   const StackedScaffoldBody(
       {Key key,
-      @required this.locals,
+      this.locals,
       @required this.child,
-      @required this.onTap,
-      @required this.locale})
+      this.onTap,
+      this.locale,
+      @required this.appBarTitle})
       : super(key: key);
 
   @override
@@ -46,6 +48,8 @@ class _StackedScaffoldBodyState extends State<StackedScaffoldBody>
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations _locales = AppLocalizations.of(context);
+    Locale _locale = Localizations.localeOf(context);
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -61,36 +65,52 @@ class _StackedScaffoldBodyState extends State<StackedScaffoldBody>
                           BorderSide(color: Colors.cyan[700], width: 12.0))),
               padding: const EdgeInsets.only(top: 12.0),
               child: AppBar(
-                leading: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: () {
-                      _anController.forward().then((_) {
-                        showModalBottomSheet(
-                                builder: (context) {
-                                  return BottomDrawer(
-                                    locale: widget.locale,
-                                    onTap: widget.onTap,
-                                    title: widget.locals.title,
-                                    showSnackBar: _showSnackBar,
-                                  );
-                                },
-                                context: context)
-                            .then((_) => _anController.reverse());
-                      });
-                    },
-                    child: Hero(
-                      tag: 'drawer',
-                      child: AnimatedIcon(
-                        icon: AnimatedIcons.menu_home,
-                        progress: _anController,
+                leading: widget.appBarTitle.contains('Universal') ||
+                        widget.appBarTitle.contains('الشامل')
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            _anController.forward().then((_) {
+                              showModalBottomSheet(
+                                      builder: (context) {
+                                        return BottomDrawer(
+                                          locale: _locale,
+                                          onTap: widget.onTap,
+                                          title: _locales.title,
+                                          showSnackBar: _showSnackBar,
+                                        );
+                                      },
+                                      context: context)
+                                  .then((_) => _anController.reverse());
+                            });
+                          },
+                          child: Hero(
+                            tag: 'drawer',
+                            child: AnimatedIcon(
+                              icon: AnimatedIcons.menu_home,
+                              progress: _anController,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            _anController.forward().then((_) {
+                              Navigator.of(context).pop();
+                            });
+                          },
+                          child: AnimatedIcon(
+                            icon: AnimatedIcons.arrow_menu,
+                            progress: _anController,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 elevation: 0.0,
                 centerTitle: true,
-                title: Text(widget.locals.title),
+                title: Text(widget.appBarTitle),
               )),
           Padding(
             padding: const EdgeInsets.only(top: 80.0),

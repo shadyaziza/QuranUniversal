@@ -40,7 +40,7 @@ class _RootState extends State<Root> {
       locale: locale,
       onGenerateTitle: (context) => AppLocalizations.of(context).title,
       theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white10,
+          scaffoldBackgroundColor: Colors.grey[100],
           fontFamily: locale?.languageCode == 'ar' ? 'Amiri' : 'Montserrat',
           primarySwatch: Colors.cyan,
           canvasColor: Colors.cyan[700],
@@ -50,7 +50,8 @@ class _RootState extends State<Root> {
         AppLocalizations locals = AppLocalizations.of(context);
         return Theme(
             data: ThemeData(
-                scaffoldBackgroundColor: Colors.white70,
+                scaffoldBackgroundColor: Colors.grey[100],
+                canvasColor: Colors.cyan[700],
                 primarySwatch: Colors.cyan,
                 fontFamily:
                     locale?.languageCode == 'ar' ? 'Naskh' : 'Montserrat'),
@@ -90,6 +91,7 @@ class _RootState extends State<Root> {
             //     ),
             //     body:
             child: StackedScaffoldBody(
+              appBarTitle: locals.title,
               locale: locale,
               child: HomePage(),
               locals: locals,
