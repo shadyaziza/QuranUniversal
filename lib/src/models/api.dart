@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import './quran_universal.dart';
+// import './quran_universal.dart';
 import './serializers.dart';
 import 'package:dio/dio.dart';
 import './endpoint_models.dart';
