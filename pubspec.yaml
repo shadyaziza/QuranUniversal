@@ -29,6 +29,8 @@ dependencies:
   audioplayers: ^0.11.0
   flutter_sound: ^1.4.0
   audioplayer: ^0.5.2
+  flare_flutter: ^1.5.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -61,6 +63,7 @@ flutter:
   #  - images/a_dot_ham.jpeg
   assets:
     - assets/quran-uthmani.json
+    - assets/flares/Mushaf.flr
   
   fonts:
    - family: Hafs

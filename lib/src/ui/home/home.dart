@@ -3,6 +3,7 @@ import '../../blocs/surah_list/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../surah/surah.dart';
 import '../../locale/locales.dart';
+import '../../common/common.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -29,9 +30,7 @@ class _HomePageState extends State<HomePage> {
       bloc: _surahListBloc,
       builder: (_, SurahListState state) {
         if (state is SurahListUninitialized) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return MushafLoader();
         }
         if (state is SurahListError) {
           return Center(
