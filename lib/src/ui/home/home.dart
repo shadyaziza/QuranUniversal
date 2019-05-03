@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../blocs/surah_list/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../surah/surah.dart';
+import '../../locale/locales.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,6 +22,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations locals = AppLocalizations.of(context);
+    Locale locale = Localizations.localeOf(context);
+
     return BlocBuilder(
       bloc: _surahListBloc,
       builder: (_, SurahListState state) {
@@ -52,13 +56,31 @@ class _HomePageState extends State<HomePage> {
                                 number: state.surahsMeta[index].number,
                               )),
                     ),
-                leading: Text('${state.surahsMeta[index].number}'),
-                title: Text(state.surahsMeta[index].englishName),
+                leading: Text(
+                  locale.languageCode == 'ar'
+                      ? replaceFarsiNumber('${state.surahsMeta[index].number}')
+                      : '${state.surahsMeta[index].number}',
+                  style: TextStyle(fontFamily: 'Amiri'),
+                ),
+                title: Text(locale.languageCode == 'ar'
+                    ? state.surahsMeta[index].name
+                    : state.surahsMeta[index].englishName),
               );
             },
           );
         }
       },
     );
+  }
+
+  String replaceFarsiNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const farsi = ['۰', '۱', '۲', '۳', '٤', '٥', '٦', '۷', '۸', '۹'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(english[i], farsi[i]);
+    }
+
+    return input;
   }
 }

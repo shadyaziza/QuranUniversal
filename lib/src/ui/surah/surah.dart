@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/gestures.dart';
 
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:rxdart/rxdart.dart';
 import '../../blocs/single_surah/bloc.dart';
 import '../../models/endpoint_models.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -21,16 +17,37 @@ class SurahScreen extends StatefulWidget {
 
 class _SurahScreenState extends State<SurahScreen> {
   SingleSurahBloc _singleSurahBloc = SingleSurahBloc();
+
   // TapGestureRecognizer _tapGestureRecognizer;
-  FlutterSound _sound;
+
   AudioPlayer _audio;
+  String _url;
   @override
   void initState() {
-    _sound = FlutterSound();
-    _singleSurahBloc.dispatch(Fetch(number: widget.number));
-    _audio = AudioPlayer();
+    // Locale locale = Localizations.localeOf(context);
+    // if (locale.languageCode == 'ar') {
+    //   _url =
+    //       'http://api.alquran.cloud/v1/surah/${widget.number}/ar.abdulbasitmurattal';
+    // } else {
+    //   _url = 'http://api.alquran.cloud/v1/surah/${widget.number}/en.ahmedali';
+    // }
+    // _singleSurahBloc.dispatch(Fetch(url: _url));
+    _audio = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
     // _tapGestureRecognizer = TapGestureRecognizer()..onTap = _handleLongPress;
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    Locale locale = Localizations.localeOf(context);
+    if (locale.languageCode == 'ar') {
+      _url =
+          'http://api.alquran.cloud/v1/surah/${widget.number}/ar.abdulbasitmurattal';
+    } else {
+      _url = 'http://api.alquran.cloud/v1/surah/${widget.number}/en.ahmedali';
+    }
+    _singleSurahBloc.dispatch(Fetch(url: _url));
+    super.didChangeDependencies();
   }
 
   @override
@@ -42,10 +59,12 @@ class _SurahScreenState extends State<SurahScreen> {
   }
 
   void _handleLongPress(String link) async {
-    if (_audio.state == AudioPlayerState.PLAYING) {
-      await _audio.stop();
+    if (link != null) {
+      if (_audio.state == AudioPlayerState.PLAYING) {
+        await _audio.stop();
+      }
+      await _audio.play(link);
     }
-    await _audio.play(link);
   }
 
   Future<void> _playSurah(Surah surah) async {
@@ -70,8 +89,20 @@ class _SurahScreenState extends State<SurahScreen> {
     });
   }
 
+  String replaceFarsiNumber(String input) {
+    const english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const farsi = ['۰', '۱', '۲', '۳', '٤', '٥', '٦', '۷', '۸', '۹'];
+
+    for (int i = 0; i < english.length; i++) {
+      input = input.replaceAll(english[i], farsi[i]);
+    }
+
+    return input;
+  }
+
   @override
   Widget build(BuildContext context) {
+    Locale locale = Localizations.localeOf(context);
     return BlocBuilder(
       bloc: _singleSurahBloc,
       builder: (_, SingleSurahState state) {
@@ -106,140 +137,144 @@ class _SurahScreenState extends State<SurahScreen> {
                   centerTitle: true,
                   elevation: 0.0,
                   title: Text(
-                    state.surah.name,
+                    locale.languageCode == 'ar'
+                        ? state.surah.name
+                        : state.surah.englishNameTranslation,
                     textScaleFactor: 1.5,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                   ),
                 ),
-                body: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: ListView(
-                    children: <Widget>[
-                      Directionality(
-                          textDirection: TextDirection.ltr,
-                          child: StreamBuilder(
-                            stream: _audio.onPlayerStateChanged,
-                            builder: (_,
-                                AsyncSnapshot<AudioPlayerState> audioState) {
-                              return StreamBuilder(
-                                stream: _audio.onDurationChanged,
-                                builder:
-                                    (_, AsyncSnapshot<Duration> totalDuration) {
-                                  return StreamBuilder(
-                                    stream: _audio.onAudioPositionChanged,
-                                    builder:
-                                        (_, AsyncSnapshot<Duration> progress) {
-                                      return Container(
-                                        child: Center(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  audioState?.data !=
-                                                          AudioPlayerState
-                                                              .PLAYING
-                                                      ? IconButton(
-                                                          icon: Icon(
-                                                              Icons.play_arrow),
-                                                          onPressed: audioState
-                                                                      ?.data !=
-                                                                  AudioPlayerState
-                                                                      .PLAYING
-                                                              ? () => _playSurah(
-                                                                  state.surah)
-                                                              : null)
-                                                      : IconButton(
-                                                          icon:
-                                                              Icon(Icons.pause),
-                                                          onPressed: () async =>
-                                                              await _audio
-                                                                  .pause()),
-                                                  IconButton(
-                                                      icon: Icon(Icons.stop),
-                                                      onPressed: audioState
-                                                                  ?.data ==
-                                                              AudioPlayerState
-                                                                  .PLAYING
-                                                          ? () async =>
-                                                              await _audio
-                                                                  .stop()
-                                                          : null),
-                                                ],
-                                              ),
-                                              !progress.hasData
-                                                  ? Container()
-                                                  : Text(
-                                                      '${progress.data.inHours} : ${progress.data.inMinutes} : ${progress.data.inSeconds} / ${totalDuration.data.inHours} : ${totalDuration.data.inMinutes} : ${totalDuration.data.inSeconds}  '),
-                                              totalDuration.hasData &&
-                                                      audioState.data !=
-                                                          AudioPlayerState
-                                                              .STOPPED
-                                                  ? Flexible(
-                                                      child:
-                                                          LinearProgressIndicator(
-                                                        value: progress.data
-                                                                .inMilliseconds /
-                                                            totalDuration.data
-                                                                .inMilliseconds,
-                                                      ),
-                                                    )
-                                                  : Container(),
-                                            ],
-                                          ),
+                body: ListView(
+                  children: <Widget>[
+                    StreamBuilder(
+                      stream: _audio.onPlayerStateChanged,
+                      builder: (_, AsyncSnapshot<AudioPlayerState> audioState) {
+                        return StreamBuilder(
+                          stream: _audio.onDurationChanged,
+                          builder: (_, AsyncSnapshot<Duration> totalDuration) {
+                            return StreamBuilder(
+                              stream: _audio.onAudioPositionChanged,
+                              builder: (_, AsyncSnapshot<Duration> progress) {
+                                return Container(
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            audioState?.data !=
+                                                    AudioPlayerState.PLAYING
+                                                ? IconButton(
+                                                    icon:
+                                                        Icon(Icons.play_arrow),
+                                                    onPressed:
+                                                        audioState?.data !=
+                                                                AudioPlayerState
+                                                                    .PLAYING
+                                                            ? () => _playSurah(
+                                                                state.surah)
+                                                            : null)
+                                                : IconButton(
+                                                    icon: Icon(Icons.pause),
+                                                    onPressed: () async =>
+                                                        await _audio.pause()),
+                                            IconButton(
+                                                icon: Icon(Icons.stop),
+                                                onPressed: audioState?.data ==
+                                                        AudioPlayerState.PLAYING
+                                                    ? () async =>
+                                                        await _audio.stop()
+                                                    : null),
+                                          ],
                                         ),
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          )),
-                      Center(
-                          child:
-                              Text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ')),
-                      SingleChildScrollView(
-                        child: Container(
-                          margin: const EdgeInsets.all(12.0),
-                          decoration:
-                              BoxDecoration(border: Border.all(width: 2.0)),
-                          padding: const EdgeInsets.all(20.0),
-                          child: Text.rich(
-                            TextSpan(
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () => _handleLongPress(
-                                    state.surah.ayahs[0].audio),
-                              text: '${state.surah.ayahs[0].text} ${state.surah.ayahs[0].numberInSurah} '
-                                  .replaceFirst(
-                                      'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
-                                      ''),
-                              children: List.generate(
-                                state.surah.ayahs.length - 1,
-                                (int index) {
-                                  return TextSpan(
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () => _handleLongPress(
-                                            state.surah.ayahs[index + 1].audio),
-                                      text:
-                                          '${state.surah.ayahs[index + 1].text}',
-                                      children: [
-                                        TextSpan(
-                                            text:
-                                                ' ${state.surah.ayahs[index + 1].numberInSurah} ',
-                                            style: TextStyle(color: Colors.red))
-                                      ]);
-                                },
-                              ),
+                                        !progress.hasData
+                                            ? Container()
+                                            : Text(
+                                                '${progress.data.inHours} : ${progress.data.inMinutes} : ${progress.data.inSeconds} / ${totalDuration.data.inHours} : ${totalDuration.data.inMinutes} : ${totalDuration.data.inSeconds}  '),
+                                        totalDuration.hasData &&
+                                                audioState.data !=
+                                                    AudioPlayerState.STOPPED
+                                            ? Flexible(
+                                                child: LinearProgressIndicator(
+                                                  value: progress
+                                                          .data.inMilliseconds /
+                                                      totalDuration
+                                                          .data.inMilliseconds,
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    Center(
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: locale.languageCode == 'ar'
+                          ? Text('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ')
+                          : Text(
+                              'In the name of Allah, most benevolent, ever-merciful.',
+                              textScaleFactor: 0.7,
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.start,
-                            textDirection: TextDirection.rtl,
+                    )),
+                    SingleChildScrollView(
+                      child: Container(
+                        margin: const EdgeInsets.all(12.0),
+                        decoration:
+                            BoxDecoration(border: Border.all(width: 2.0)),
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text.rich(
+                          TextSpan(
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () =>
+                                  _handleLongPress(state.surah.ayahs[0].audio),
+                            text: '${state.surah.ayahs[0].text} ${state.surah.ayahs[0].numberInSurah} '
+                                .replaceFirst(
+                                    'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+                                    '')
+                                .replaceFirst('1', '')
+                                .replaceFirst(
+                                    'In the name of Allah, most benevolent, ever-merciful.',
+                                    ''),
+                            children: List.generate(
+                              state.surah.ayahs.length - 1,
+                              (int index) {
+                                return TextSpan(
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => _handleLongPress(
+                                          state.surah.ayahs[index + 1].audio),
+                                    text:
+                                        ' ${state.surah.ayahs[index + 1].text} ',
+                                    children: [
+                                      TextSpan(
+                                          text: locale.languageCode == 'ar'
+                                              ? replaceFarsiNumber(state
+                                                  .surah
+                                                  .ayahs[index + 1]
+                                                  .numberInSurah
+                                                  .toString())
+                                              : ' ${state.surah.ayahs[index + 1].numberInSurah} ',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontFamily: 'Amiri'))
+                                    ]);
+                              },
+                            ),
                           ),
+                          textAlign: TextAlign.start,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ));
           }
         }

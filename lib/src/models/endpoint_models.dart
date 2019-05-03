@@ -41,6 +41,7 @@ abstract class Ayah implements Built<Ayah, AyahBuilder> {
   int get ruku;
   int get hizbQuarter;
   String get text;
+  @nullable
   String get audio;
   JsonObject get sajda;
   Ayah._();

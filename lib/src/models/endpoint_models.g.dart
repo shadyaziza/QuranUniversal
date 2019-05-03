@@ -166,13 +166,16 @@ class _$AyahSerializer implements StructuredSerializer<Ayah> {
           specifiedType: const FullType(int)),
       'text',
       serializers.serialize(object.text, specifiedType: const FullType(String)),
-      'audio',
-      serializers.serialize(object.audio,
-          specifiedType: const FullType(String)),
       'sajda',
       serializers.serialize(object.sajda,
           specifiedType: const FullType(JsonObject)),
     ];
+    if (object.audio != null) {
+      result
+        ..add('audio')
+        ..add(serializers.serialize(object.audio,
+            specifiedType: const FullType(String)));
+    }
 
     return result;
   }
@@ -710,9 +713,6 @@ class _$Ayah extends Ayah {
     }
     if (text == null) {
       throw new BuiltValueNullFieldError('Ayah', 'text');
-    }
-    if (audio == null) {
-      throw new BuiltValueNullFieldError('Ayah', 'audio');
     }
     if (sajda == null) {
       throw new BuiltValueNullFieldError('Ayah', 'sajda');

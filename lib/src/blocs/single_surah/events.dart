@@ -3,9 +3,9 @@ import 'package:meta/meta.dart';
 abstract class SingleSurahEvent {}
 
 class Fetch extends SingleSurahEvent {
-  final int number;
+  final String url;
 
-  Fetch({@required this.number});
+  Fetch({@required this.url});
   @override
   String toString() => 'Fetch';
 }
