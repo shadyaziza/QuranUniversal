@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import './src/ui/home/home.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './src/locale/locales.dart';
+import './src/common/common.dart';
 
 void main() => runApp(Root());
 
@@ -46,43 +47,43 @@ class _RootState extends State<Root> {
               fontFamily:
                   locale?.languageCode == 'ar' ? 'Naskh' : 'Montserrat'),
           child: Scaffold(
-            drawer: Drawer(
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height / 3,
-                    color: Theme.of(context).accentColor,
-                    child: Center(child: Text(locals.title)),
-                  ),
-                  Align(
-                    heightFactor: 7.5,
-                    alignment: locale?.languageCode == 'ar'
-                        ? FractionalOffset.bottomLeft
-                        : FractionalOffset.bottomRight,
-                    child: Directionality(
-                      textDirection: locale?.languageCode == 'ar'
-                          ? TextDirection.ltr
-                          : TextDirection.rtl,
-                      child: ListTile(
-                        title: Text(
-                            locale?.languageCode == 'ar' ? 'English' : 'عربي'),
-                        enabled: true,
-                        onTap: () => setState(() {
-                              locale = Locale(
-                                  locale?.languageCode == 'ar' ? 'en' : 'ar',
-                                  '');
-                            }),
+              drawer: Drawer(
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      height: MediaQuery.of(context).size.height / 3,
+                      color: Theme.of(context).accentColor,
+                      child: Center(child: Text(locals.title)),
+                    ),
+                    Align(
+                      heightFactor: 7.5,
+                      alignment: locale?.languageCode == 'ar'
+                          ? FractionalOffset.bottomLeft
+                          : FractionalOffset.bottomRight,
+                      child: Directionality(
+                        textDirection: locale?.languageCode == 'ar'
+                            ? TextDirection.ltr
+                            : TextDirection.rtl,
+                        child: ListTile(
+                          title: Text(locale?.languageCode == 'ar'
+                              ? 'English'
+                              : 'عربي'),
+                          enabled: true,
+                          onTap: () => setState(() {
+                                locale = Locale(
+                                    locale?.languageCode == 'ar' ? 'en' : 'ar',
+                                    '');
+                              }),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            appBar: AppBar(
-              title: Text(locals.title),
-            ),
-            body: HomePage(),
-          ),
+              body: StackedScaffoldBody(
+                child: HomePage(),
+                locals: locals,
+              )),
         );
       }),
     );
