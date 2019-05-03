@@ -30,7 +30,9 @@ dependencies:
   flutter_sound: ^1.4.0
   audioplayer: ^0.5.2
   flare_flutter: ^1.5.0
-
+  build_runner: 
+  built_value_generator: ^6.4.0
+  intl_translation: ^0.17.4
 
 
   # The following adds the Cupertino Icons font to your application.

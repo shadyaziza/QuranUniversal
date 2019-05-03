@@ -86,7 +86,7 @@ packages:
     source: hosted
     version: "1.0.4"
   build_runner:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: build_runner
       url: "https://pub.dartlang.org"
@@ -114,7 +114,7 @@ packages:
     source: hosted
     version: "6.4.0"
   built_value_generator:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: built_value_generator
       url: "https://pub.dartlang.org"
@@ -297,7 +297,7 @@ packages:
     source: hosted
     version: "0.15.7"
   intl_translation:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: intl_translation
       url: "https://pub.dartlang.org"

@@ -1,4 +1,4 @@
-package com.example.quran_universal
+package free.quran_universal.app
 
 import android.os.Bundle
 
