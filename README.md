@@ -1,4 +1,4 @@
-# quran_universal
+# Quran Universal - القرآن الشامل
 
 A new Flutter project.
 

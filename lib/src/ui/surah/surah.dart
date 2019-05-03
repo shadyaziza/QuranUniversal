@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import '../../blocs/single_surah/bloc.dart';
 import '../../models/endpoint_models.dart';
 import 'package:audioplayers/audioplayers.dart';
-import '../../common/mushaf_loader.dart';
+import '../../common/common.dart';
 // import 'package:audioplayer/audioplayer.dart';
 
 class SurahScreen extends StatefulWidget {
@@ -109,13 +109,15 @@ class _SurahScreenState extends State<SurahScreen> {
       builder: (_, SingleSurahState state) {
         if (state is SingleSurahUninitialized) {
           return Scaffold(
-            body: MushafLoader(),
+            body: Center(
+              child: MushafLoader(),
+            ),
           );
         }
         if (state is SingleSurahError) {
           return Scaffold(
             body: Center(
-              child: Text('Could not fetch surahhh'),
+              child: Text('Could not fetch surah'),
             ),
           );
         }
@@ -127,23 +129,12 @@ class _SurahScreenState extends State<SurahScreen> {
               ),
             );
           } else {
-            return Scaffold(
-                appBar: AppBar(
-                  iconTheme: Theme.of(context)
-                      .iconTheme
-                      .copyWith(color: Theme.of(context).primaryColor),
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  centerTitle: true,
-                  elevation: 0.0,
-                  title: Text(
-                    locale.languageCode == 'ar'
-                        ? state.surah.name
-                        : state.surah.englishNameTranslation,
-                    textScaleFactor: 1.5,
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  ),
-                ),
-                body: ListView(
+            return StackedScaffoldBody(
+                // locals: AppLoca,
+                appBarTitle: locale.languageCode == 'ar'
+                    ? state.surah.name
+                    : state.surah.englishNameTranslation,
+                child: ListView(
                   children: <Widget>[
                     StreamBuilder(
                       stream: _audio.onPlayerStateChanged,
@@ -229,7 +220,7 @@ class _SurahScreenState extends State<SurahScreen> {
                       child: Container(
                         margin: const EdgeInsets.all(12.0),
                         decoration:
-                            BoxDecoration(border: Border.all(width: 2.0)),
+                            BoxDecoration(border: Border.all(width: 0.5)),
                         padding: const EdgeInsets.all(20.0),
                         child: Text.rich(
                           TextSpan(

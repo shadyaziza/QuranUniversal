@@ -50,20 +50,24 @@ class _HomePageState extends State<HomePage> {
               return ListTile(
                 onTap: () => Navigator.of(context).push(
                       MaterialPageRoute(
-                          fullscreenDialog: true,
+                          // fullscreenDialog: true,
                           builder: (_) => SurahScreen(
                                 number: state.surahsMeta[index].number,
                               )),
                     ),
-                leading: Text(
-                  locale.languageCode == 'ar'
-                      ? replaceFarsiNumber('${state.surahsMeta[index].number}')
-                      : '${state.surahsMeta[index].number}',
-                  style: TextStyle(fontFamily: 'Amiri'),
+                // leading: Text(
+
+                //   style: TextStyle(fontFamily: 'Amiri'),
+                // ),
+                title: Center(
+                  child: Text(
+                    locale.languageCode == 'ar'
+                        ? replaceFarsiNumber(
+                            '${state.surahsMeta[index].number}. ${state.surahsMeta[index].name}')
+                        : '${state.surahsMeta[index].number}. ${state.surahsMeta[index].englishName}',
+                    textAlign: TextAlign.left,
+                  ),
                 ),
-                title: Text(locale.languageCode == 'ar'
-                    ? state.surahsMeta[index].name
-                    : state.surahsMeta[index].englishName),
               );
             },
           );
